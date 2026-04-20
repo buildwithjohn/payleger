@@ -1,0 +1,45 @@
+<div class="budgets">
+  <div class="page-header">
+    <div class="page-title">Budgets</div>
+    <div class="page-sub">Monthly spending limits and current utilisation</div>
+  </div>
+
+  <div class="budget-grid">
+    <div class="budget-card" *ngFor="let b of budgets$ | async">
+      <div class="budget-card-top">
+        <span class="budget-icon">{{ categoryIcon(b.category) }}</span>
+        <div class="budget-info">
+          <div class="budget-label">{{ categoryLabel(b.category) }}</div>
+          <div class="budget-amounts">
+            <span class="spent">{{ b.spent | naira }}</span>
+            <span class="sep"> of </span>
+            <span class="limit">{{ b.limit | naira }}</span>
+          </div>
+        </div>
+        <div class="budget-pct" [class]="statusClass(b.spent, b.limit)">
+          {{ percent(b.spent, b.limit) }}%
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div
+          class="progress-fill"
+          [class]="statusClass(b.spent, b.limit)"
+          [style.width.%]="percent(b.spent, b.limit)"
+        ></div>
+      </div>
+
+      <div class="budget-footer">
+        <span class="remaining" [class]="statusClass(b.spent, b.limit)">
+          <ng-container *ngIf="b.limit - b.spent > 0">
+            {{ b.limit - b.spent | naira }} remaining
+          </ng-container>
+          <ng-container *ngIf="b.limit - b.spent <= 0">
+            Budget exceeded
+          </ng-container>
+        </span>
+        <span class="period">Monthly</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="app-shell">
+  <app-sidebar (navChange)="setView($event)"></app-sidebar>
+
+  <main class="main-content">
+    <app-dashboard    *ngIf="activeView() === 'dashboard'"></app-dashboard>
+    <app-transactions *ngIf="activeView() === 'transactions'"></app-transactions>
+    <app-budgets      *ngIf="activeView() === 'budgets'"></app-budgets>
+    <app-analytics    *ngIf="activeView() === 'analytics'"></app-analytics>
+  </main>
+</div>

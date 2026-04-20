@@ -1,0 +1,47 @@
+<div class="analytics">
+  <div class="page-header">
+    <div class="page-title">Analytics</div>
+    <div class="page-sub">Spending patterns and income vs expense trends</div>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="summary-label">Monthly Income</div>
+      <div class="summary-value green">{{ (income$ | async) ?? 0 | naira }}</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Monthly Expenses</div>
+      <div class="summary-value red">{{ (expenses$ | async) ?? 0 | naira }}</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Net Savings</div>
+      <div class="summary-value gold">{{ ((income$ | async) ?? 0) - ((expenses$ | async) ?? 0) | naira }}</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Savings Rate</div>
+      <div class="summary-value gold">{{ savingsRate() }}%</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Spending by Category</div>
+      <div class="donut-wrap">
+        <canvas #donutCanvas></canvas>
+      </div>
+      <div class="legend">
+        <div class="legend-item" *ngFor="let entry of categoryEntries()">
+          <span class="legend-dot" [style.background]="COLORS[entry.key] || '#94A3B8'"></span>
+          <span class="legend-label">{{ entry.key | titlecase }}</span>
+          <span class="legend-value">{{ entry.value | naira }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Income vs Expenses (6 Months)</div>
+      <div class="bar-wrap">
+        <canvas #barCanvas></canvas>
+      </div>
+    </div>
+  </div>
+</div>

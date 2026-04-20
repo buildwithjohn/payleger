@@ -1,0 +1,49 @@
+<div class="transactions">
+  <div class="page-header">
+    <div class="page-title">Transactions</div>
+    <div class="page-sub">Filter, search, and review all activity</div>
+  </div>
+
+  <div class="filters" [formGroup]="filterForm">
+    <input class="search-input" formControlName="search" placeholder="Search transactions..."/>
+    <select formControlName="category">
+      <option *ngFor="let c of categories" [value]="c.value">{{ c.label }}</option>
+    </select>
+    <select formControlName="type">
+      <option value="all">All Types</option>
+      <option value="credit">Credits Only</option>
+      <option value="debit">Debits Only</option>
+    </select>
+    <select formControlName="dateRange">
+      <option value="7d">Last 7 Days</option>
+      <option value="30d">Last 30 Days</option>
+      <option value="90d">Last 90 Days</option>
+      <option value="all">All Time</option>
+    </select>
+  </div>
+
+  <div class="tx-table">
+    <div class="tx-table-head">
+      <span>Transaction</span>
+      <span>Category</span>
+      <span>Date</span>
+      <span>Status</span>
+      <span class="right">Amount</span>
+    </div>
+    <div class="tx-table-row" *ngFor="let tx of transactions$ | async">
+      <div class="tx-desc-cell">
+        <span class="tx-icon">{{ categoryIcon(tx.category) }}</span>
+        <span class="tx-desc">{{ tx.description }}</span>
+      </div>
+      <div><span class="category-chip">{{ tx.category }}</span></div>
+      <div class="tx-date">{{ formatDate(tx.date) }}</div>
+      <div><span class="status-chip" [class]="tx.status">{{ tx.status }}</span></div>
+      <div class="tx-amount right" [class.credit]="tx.type === 'credit'" [class.debit]="tx.type === 'debit'">
+        {{ tx.type === 'credit' ? '+' : '-' }}{{ tx.amount | naira }}
+      </div>
+    </div>
+    <div class="empty" *ngIf="(transactions$ | async)?.length === 0">
+      No transactions match your filters.
+    </div>
+  </div>
+</div>

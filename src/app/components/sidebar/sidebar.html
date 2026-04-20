@@ -1,0 +1,44 @@
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-mark">P</span>
+    <span class="brand-name">PayLedger</span>
+  </div>
+
+  <nav class="nav">
+    <button
+      *ngFor="let item of navItems"
+      class="nav-item"
+      [class.active]="activeNav === item.id"
+      (click)="setNav(item.id)"
+    >
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </button>
+  </nav>
+
+  <div class="accounts-section">
+    <div class="accounts-title">My Accounts</div>
+    <ng-container *ngIf="accounts$ | async as accounts">
+      <div
+        *ngFor="let acc of accounts"
+        class="account-item"
+        [class.active]="(selectedId$ | async) === acc.id"
+        (click)="selectAcc(acc.id)"
+      >
+        <div class="acc-dot" [style.background]="acc.color"></div>
+        <div class="acc-info">
+          <div class="acc-name">{{ acc.name }}</div>
+          <div class="acc-num">{{ acc.number }}</div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="avatar">JA</div>
+    <div class="user-info">
+      <div class="user-name">John Akinola</div>
+      <div class="user-role">Premium Account</div>
+    </div>
+  </div>
+</aside>

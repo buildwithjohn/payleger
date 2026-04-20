@@ -1,0 +1,66 @@
+<div class="dashboard" *ngIf="!(loading$ | async); else loader">
+
+  <div class="stat-grid">
+    <div class="stat-card primary" *ngIf="account$ | async as acc">
+      <div class="stat-label">Account Balance</div>
+      <div class="stat-value">{{ acc.balance | naira }}</div>
+      <div class="stat-sub">{{ acc.name }} &nbsp;·&nbsp; {{ acc.number }}</div>
+      <div class="sparkline" *ngIf="sparkline$ | async as sp">
+        <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+          <path [attr.d]="sparklinePath(sp)" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-card green">
+      <div class="stat-label">Monthly Income</div>
+      <div class="stat-value">{{ (income$ | async) ?? 0 | naira }}</div>
+      <div class="stat-sub">This month</div>
+      <div class="stat-badge up">▲ Credits</div>
+    </div>
+
+    <div class="stat-card red">
+      <div class="stat-label">Monthly Expenses</div>
+      <div class="stat-value">{{ (expenses$ | async) ?? 0 | naira }}</div>
+      <div class="stat-sub">This month</div>
+      <div class="stat-badge down">▼ Debits</div>
+    </div>
+
+    <div class="stat-card dark">
+      <div class="stat-label">Total Net Worth</div>
+      <div class="stat-value">{{ (totalBalance$ | async) ?? 0 | naira }}</div>
+      <div class="stat-sub">All NGN accounts</div>
+      <div class="accounts-dots">
+        <span *ngFor="let acc of (accounts$ | async)" class="dot" [style.background]="acc.color"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title">Recent Transactions</div>
+    <div class="section-sub">Last 10 activity</div>
+  </div>
+
+  <div class="tx-list">
+    <div class="tx-row" *ngFor="let tx of (transactions$ | async)?.slice(0, 10)">
+      <div class="tx-icon">{{ categoryIcon(tx.category) }}</div>
+      <div class="tx-info">
+        <div class="tx-desc">{{ tx.description }}</div>
+        <div class="tx-meta">{{ formatDate(tx.date) }} &nbsp;·&nbsp;
+          <span class="tx-status" [class]="tx.status">{{ tx.status }}</span>
+        </div>
+      </div>
+      <div class="tx-amount" [class.credit]="tx.type === 'credit'" [class.debit]="tx.type === 'debit'">
+        {{ tx.type === 'credit' ? '+' : '-' }}{{ tx.amount | naira }}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #loader>
+  <div class="loader">
+    <div class="spinner"></div>
+    <span>Loading your finances...</span>
+  </div>
+</ng-template>
