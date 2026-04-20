@@ -1,8 +1,0 @@
-src/
-node_modules/
-.angular/
-dist/
-angular.json
-tsconfig*.json
-package.json
-package-lock.json
