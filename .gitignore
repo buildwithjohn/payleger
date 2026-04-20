@@ -1,6 +1,5 @@
-node_modules/
-dist/
 .angular/
 .env
 .vercel
+node_modules/
 *.log
